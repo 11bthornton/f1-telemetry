@@ -1,10 +1,21 @@
 use async_std::net::UdpSocket;
 use bincode::deserialize;
 use futures;
+use lazy_static::__Deref;
 use std::{
-    ops::{Generator, GeneratorState},
+    ops::{Deref, Generator, GeneratorState},
     pin::Pin,
 };
+
+pub struct TelemetryLock<T>(std::sync::Arc<std::sync::Mutex<T>>);
+
+impl<T> TelemetryLock<T> {
+    pub fn new(telemetry_packet: T) -> Self {
+        Self(std::sync::Arc::new(std::sync::Mutex::new(telemetry_packet)))
+    }
+
+}
+
 
 use crate::telemetry_data::{
     car_damage_data::PacketCarDamageData,

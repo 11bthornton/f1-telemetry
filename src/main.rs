@@ -13,6 +13,7 @@ use image;
 use telemetry_data::car_telemetry_data::PacketCarTelemetryData;
 use telemetry_data::event_data::PacketEventFinal;
 use telemetry_data::participant_data::PacketParticipantData;
+use telemetry_data::session_history::PacketSessionHistoryData;
 
 use crate::telemetry_data::motion_data::PacketMotionData;
 use crate::telemetry_data::F1Data;
@@ -31,6 +32,7 @@ lazy_static! {
     static ref LAP_DATA: Arc<Mutex<Option<PacketLapData>>> = Arc::new(Mutex::new(None));
     static ref POSITIONS: Arc<Mutex<[u8; 22]>> = Arc::new(Mutex::new([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]));
     static ref TELEM: Arc<Mutex<Option<PacketCarTelemetryData>>> = Arc::new(Mutex::new(None));
+    static ref HISTORY: Arc<Mutex<Option<PacketSessionHistoryData>>> = Arc::new(Mutex::new(None));
 }
 
 use app::TemplateApp;
@@ -58,18 +60,26 @@ async fn main() {
                 F1Data::Motion(packet_motion) => {
                     *MOTION_DATA.lock().unwrap() = Some(packet_motion)
                 }
-                F1Data::Lap(mut packet_lap) => {
+                F1Data::Lap(packet_lap) => {
 
-                    // packet_lap.lap_data.sort_by(|one, two| {
-                    //     one.car_position.partial_cmp(&two.car_position).unwrap()
-                    // });
+                    // Every time this packet comes in,
+                    // this will tell us the order of the
+                    // participants (ordering depends on type of event
+                    // e.g. fastest lap or P1...),
+                    // so we need to sort the packet by these positions
                     
                     POSITIONS.lock().unwrap().sort_by(|one, two| {
-                        packet_lap.lap_data[*one as usize].car_position.partial_cmp(&packet_lap.lap_data[*two as usize].car_position)
+                        packet_lap
+                            .lap_data[*one as usize]
+                            .car_position
+                            .partial_cmp(&packet_lap.lap_data[*two as usize].car_position)
                             .unwrap()
                     });
                 
                     *LAP_DATA.lock().unwrap() = Some(packet_lap)
+                }
+                F1Data::SessionHistory(packet_history) => {
+                    *HISTORY.lock().unwrap() = Some(packet_history)
                 }
                 
                 _ => {}

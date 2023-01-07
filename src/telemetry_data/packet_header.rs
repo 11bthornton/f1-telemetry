@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug, Default, Serialize)]
+#[derive(Deserialize, Debug, Default, Serialize, Clone)]
 pub struct PacketHeader {
     #[serde(rename(deserialize = "m_packetFormat"))]
     pub packet_format: u16,
