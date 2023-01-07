@@ -23,6 +23,7 @@ unicode_names2 = { version = "0.5.0", default-features = false }
 egui_extras = "0.19.0"
 lazy_static = "*"
 itertools = "*"
+f1-game-client = {path = "../f1-game-client"}
 
 [profile.release]
 opt-level = 3

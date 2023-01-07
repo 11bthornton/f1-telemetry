@@ -1,4 +1,4 @@
-use crate::telemetry_data::car_telemetry_data::{PacketCarTelemetryData, CarTelemetryData};
+use f1_game_client::telemetry_data::car_telemetry_data::{PacketCarTelemetryData, CarTelemetryData};
 use crate::PARTICIPANTS;
 use std::sync::{Arc, Mutex};
 
@@ -72,7 +72,7 @@ impl super::Demo for WidgetGallery {
 
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         Some(self.data.clone())
     }
 }

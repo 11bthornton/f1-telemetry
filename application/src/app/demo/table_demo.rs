@@ -2,7 +2,7 @@ use std::{sync::{Arc, Mutex}, cmp::max, fmt::Display};
 
 use egui::{RichText, Color32};
 use std::time::Duration;
-use crate::telemetry_data::{participant_data, session_history::PacketSessionHistoryData};
+use f1_game_client::telemetry_data::{participant_data, session_history::PacketSessionHistoryData};
 
 use crate::app::demo::toggle_switch::toggle;
 
@@ -41,7 +41,7 @@ impl Default for TableDemo {
 impl super::Demo for TableDemo {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
     fn name(&self) -> &'static str {
@@ -193,10 +193,10 @@ impl TableDemo {
 
                                 name_label.clone().on_hover_ui(|ui| {
 
-                                    ui.label(history_data.best_lap_time_num.to_string());
+                                    ui.label(history_data.as_ref().unwrap().best_lap_time_num.to_string());
 
                                     ui.label(
-                                        format!("{:#?}", history_data.concat())
+                                        format!("{:#?}", history_data.as_ref().unwrap().concat())
                                     );
                                 });
 
@@ -208,11 +208,11 @@ impl TableDemo {
                             row.col(|ui| {
                                 // let duration = Duration::from_millis(participant_lap_data.last_lap_time_in_ms.into());
                                 
-                                let dur = if history_data.best_lap_time_num == 0 {
+                                let dur = if history_data.as_ref().unwrap().best_lap_time_num == 0 {
                                     None
                                 } else {
                                     let time = Duration::from_millis(
-                                        history_data.concat()[history_data.best_lap_time_num as usize - 1].lap_time_in_ms.into()
+                                        history_data.as_ref().unwrap().concat()[history_data.as_ref().unwrap().best_lap_time_num as usize - 1].lap_time_in_ms.into()
                                     );
     
                                     Some(time)

@@ -12,8 +12,9 @@ use egui::plot::PlotPoints;
 use egui::plot::Points;
 use egui::plot::Text;
 
-use crate::PARTICIPANTS;
-use crate::{telemetry_data::car_telemetry_data::PacketCarTelemetryData, MOTION_DATA};
+use crate::{MOTION_DATA, PARTICIPANTS};
+
+use f1_game_client::{telemetry_data::car_telemetry_data::PacketCarTelemetryData};
 use std::fs::File;
 use std::io::Read;
 use std::io::Write;
@@ -24,7 +25,7 @@ use lazy_static::lazy_static;
 lazy_static! {
     static ref OUTERS : Vec<(f32, f32)> = {
 
-        let mut file = File::open("austria.txt").unwrap();
+        let mut file = File::open("./application/austria.txt").unwrap();
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
 

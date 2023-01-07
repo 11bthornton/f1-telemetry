@@ -5,7 +5,6 @@ pub mod car_telemetry_data;
 pub mod event_data;
 pub mod final_classification;
 pub mod lap_data;
-
 pub mod motion_data;
 pub mod packet_header;
 pub mod participant_data;

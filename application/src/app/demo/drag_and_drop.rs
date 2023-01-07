@@ -1,4 +1,5 @@
 use egui::*;
+use f1_game_client::telemetry_data::car_telemetry_data;
 
 pub fn drag_source(ui: &mut Ui, id: Id, body: impl FnOnce(&mut Ui)) {
     let is_being_dragged = ui.memory().is_being_dragged(id);
@@ -117,7 +118,7 @@ impl super::Demo for DragAndDropDemo {
         &mut self,
     ) -> Option<
         std::sync::Arc<
-            std::sync::Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>,
+            std::sync::Mutex<car_telemetry_data::PacketCarTelemetryData>,
         >,
     > {
         todo!()

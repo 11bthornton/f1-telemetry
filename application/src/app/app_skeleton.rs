@@ -1,7 +1,7 @@
 use std::sync::{Arc, Mutex};
 
 use crate::app;
-use crate::telemetry_data::{
+use f1_game_client::telemetry_data::{
     car_telemetry_data::PacketCarTelemetryData, motion_data::PacketMotionData,
 };
 

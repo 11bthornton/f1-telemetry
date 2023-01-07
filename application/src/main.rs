@@ -1,22 +1,25 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-#![feature(generators, generator_trait)]
 
 mod app;
-mod event_loop;
-mod telemetry_data;
 
-use crate::event_loop::{event_loop_generator, GeneratorIteratorAdapter};
-use crate::telemetry_data::car_status_data::PacketCarStatusData;
-use crate::telemetry_data::lap_data::PacketLapData;
-use eframe::egui;
-use image;
-use telemetry_data::car_telemetry_data::PacketCarTelemetryData;
-use telemetry_data::event_data::PacketEventFinal;
-use telemetry_data::participant_data::PacketParticipantData;
-use telemetry_data::session_history::PacketSessionHistoryData;
+use f1_game_client::{
+    telemetry_data::{
+        F1Data,
+        participant_data::*,
+        car_status_data::*,
+        motion_data::*,
+        lap_data::*,
+        car_telemetry_data::*,
+        session_history::*,
+    },
+    event_loop::{
+        event_loop_generator,
+        GeneratorIteratorAdapter,
+    },
+    
+};
 
-use crate::telemetry_data::motion_data::PacketMotionData;
-use crate::telemetry_data::F1Data;
+
 
 use std::{
     sync::{Arc, Mutex},

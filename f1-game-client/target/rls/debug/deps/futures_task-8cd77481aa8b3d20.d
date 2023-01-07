@@ -1,0 +1,11 @@
+c:\Users\Ben\Desktop\rust_f1_telemetry-main\rust_f1_telemetry-main\f1-game-client\target\rls\debug\deps\futures_task-8cd77481aa8b3d20.rmeta: C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\lib.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\spawn.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\arc_wake.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\waker.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\waker_ref.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\future_obj.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\noop_waker.rs
+
+c:\Users\Ben\Desktop\rust_f1_telemetry-main\rust_f1_telemetry-main\f1-game-client\target\rls\debug\deps\futures_task-8cd77481aa8b3d20.d: C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\lib.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\spawn.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\arc_wake.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\waker.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\waker_ref.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\future_obj.rs C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\noop_waker.rs
+
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\lib.rs:
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\spawn.rs:
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\arc_wake.rs:
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\waker.rs:
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\waker_ref.rs:
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\future_obj.rs:
+C:\Users\Ben\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-task-0.3.25\src\noop_waker.rs:

@@ -6,7 +6,7 @@ pub struct CursorTest {}
 impl super::Demo for CursorTest {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
     fn name(&self) -> &'static str {
@@ -43,7 +43,7 @@ pub struct IdTest {}
 impl super::Demo for IdTest {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
 
@@ -126,7 +126,7 @@ impl Default for ManualLayoutTest {
 impl super::Demo for ManualLayoutTest {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
 
@@ -219,7 +219,7 @@ impl Default for TableTest {
 impl super::Demo for TableTest {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
 
@@ -337,7 +337,7 @@ pub struct InputTest {
 impl super::Demo for InputTest {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
     fn name(&self) -> &'static str {
@@ -420,7 +420,7 @@ impl Default for WindowResizeTest {
 impl super::Demo for WindowResizeTest {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
     fn name(&self) -> &'static str {

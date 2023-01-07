@@ -1,4 +1,5 @@
 use egui::{containers::*, *};
+use f1_game_client::telemetry_data::car_telemetry_data;
 
 #[derive(Default)]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
@@ -23,7 +24,7 @@ impl super::Demo for DancingStrings {
         &mut self,
     ) -> Option<
         std::sync::Arc<
-            std::sync::Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>,
+            std::sync::Mutex<car_telemetry_data::PacketCarTelemetryData>,
         >,
     > {
         todo!()

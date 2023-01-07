@@ -3,7 +3,7 @@
 //! The demo-code is also used in benchmarks and tests.
 
 // ----------------------------------------------------------------------------
-use crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData;
+use f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData;
 use std::sync::{Arc, Mutex};
 
 pub mod context_menu;

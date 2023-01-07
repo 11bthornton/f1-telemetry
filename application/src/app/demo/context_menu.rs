@@ -63,7 +63,7 @@ impl super::Demo for ContextMenus {
         &mut self,
     ) -> Option<
         std::sync::Arc<
-            std::sync::Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>,
+            std::sync::Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>,
         >,
     > {
         todo!()

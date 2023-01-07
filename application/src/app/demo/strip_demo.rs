@@ -10,7 +10,7 @@ pub struct StripDemo {}
 impl super::Demo for StripDemo {
     fn get_thing(
         &mut self,
-    ) -> Option<Arc<Mutex<crate::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
+    ) -> Option<Arc<Mutex<f1_game_client::telemetry_data::car_telemetry_data::PacketCarTelemetryData>>> {
         None
     }
     fn name(&self) -> &'static str {
