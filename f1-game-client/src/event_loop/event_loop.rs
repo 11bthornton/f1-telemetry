@@ -1,7 +1,3 @@
-//! Lmao?
-//! 
-//! 
-
 use async_std::net::UdpSocket;
 use bincode::deserialize;
 use futures;
@@ -21,13 +17,13 @@ impl<T> TelemetryLock<T> {
 
 }
 
-
+// Standard prelude of types
 use crate::telemetry_data::{
     car_damage_data::PacketCarDamageData,
     car_setup_data::PacketCarSetupData,
     car_status_data::PacketCarStatusData,
     car_telemetry_data::PacketCarTelemetryData,
-    event_data::{PacketEventData, PacketEventFinal},
+    event_data::PacketEventFinal,
     final_classification::PacketClassificationData,
     lap_data::PacketLapData,
     motion_data::PacketMotionData,
@@ -63,131 +59,105 @@ where
     }
 }
 
-pub async fn event_loop_generator(port: &str) -> impl Generator<Yield = F1Data, Return = ()> {
-    let mut buf = vec![0; 2048];
-    let socket = UdpSocket::bind(format!("127.0.0.1:{}", port))
-        .await
-        .unwrap();
+macro_rules! deserialize {
+    ($ip:expr, $port:expr, $($size:expr => ($ty:ty, $enum_variant:ident)),+) => {
+        {
 
-    move || loop {
-        let (n, _peer) = futures::executor::block_on(socket.recv_from(&mut buf)).unwrap();
-        let to_yield = match n {
-            1464 => {
-                let decoded: Result<PacketMotionData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Motion");
-                }
-                let decoded: PacketMotionData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
+            let mut buf: Vec<u8> = vec![0; 2048];
+            let socket = UdpSocket::bind(
+                format!(
+                    "{}:{}",
+                    $ip,
+                    $port
+                )
+            ).await.unwrap();
 
-                F1Data::Motion(decoded)
-            }
-            1347 => {
-                let decoded: Result<PacketCarTelemetryData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Motion");
-                }
-                let decoded: PacketCarTelemetryData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
+            // #[cfg(debug)]
+            eprintln!("Listening on {}:{}", $ip, $port);
+    
+            let generator = move || 'outer: loop {
+                
+                let (n, _peer) = futures::executor::block_on(socket.recv_from(&mut buf)).unwrap();
+    
+                let to_yield = match n {
+    
+                    $(
+                        $size => {
+                            let decoded: Result<$ty, _> = deserialize(&buf);
+                            
+                            // Log and then ignore incorrectly parsed packet
+                            if decoded.is_err() {
+                                dbg!{
+                                    {
+                                        eprintln!(
+                                            "Error parsing packet of (presumed) type {} (size {} bytes)",
+                                            stringify!($ty),
+                                            n
+                                        );
+                                    }
+                                };
+                                
+                                continue 'outer;
+                            }
 
-                F1Data::Telemetry(decoded)
-            }
-            1015 => {
-                let decoded: Result<PacketClassificationData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Classification");
-                }
-                let decoded: PacketClassificationData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
+                            $enum_variant(decoded.unwrap())
+                        }
+                    ),+
+                    
+                    // Log exceptional circumstance
+                    other => {
+                        dbg!{
+                            eprintln!("Found packet of size {other}.")
+                        };
+                        continue 'outer;
+                    } 
+    
+                };
 
-                F1Data::Classification(decoded)
-            }
-            948 => {
-                let decoded: Result<PacketCarDamageData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Damage");
-                }
-                let decoded: PacketCarDamageData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
+                yield to_yield;
+                // if let Some(parsed) = to_yield {
+                //     yield parsed;
+                // }
+            };
 
-                F1Data::Damage(decoded)
-            }
-            1155 => {
-                let decoded: Result<PacketSessionHistoryData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Damage");
-                }
-                let decoded: PacketSessionHistoryData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
+            generator
+        }
+    };
+}
 
-                F1Data::SessionHistory(decoded)
-            }
-            972 => {
-                let decoded: Result<PacketLapData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Lap");
-                }
-                let decoded: PacketLapData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Lap(decoded)
-            }
-            40 => {
-                let decoded: Result<PacketEventData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Event");
-                }
-                let decoded: PacketEventFinal = decoded.unwrap().decode().unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Event(decoded)
-            }
-            632 => {
-                let decoded: Result<PacketSessionData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Session");
-                }
-                let decoded: PacketSessionData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Session(decoded)
-            }
-            1257 => {
-                let decoded: Result<PacketParticipantData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Participant");
-                }
-                let decoded: PacketParticipantData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Participant(decoded)
-            }
-            1102 => {
-                let decoded: Result<PacketCarSetupData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Setup");
-                }
-                let decoded: PacketCarSetupData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Setup(decoded)
-            }
-            2347 => {
-                let decoded: Result<PacketCarTelemetryData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Telemetry");
-                }
-                let decoded: PacketCarTelemetryData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Telemetry(decoded)
-            }
-            1058 => {
-                let decoded: Result<PacketCarStatusData, _> = deserialize(&buf);
-                if decoded.is_err() {
-                    panic!("Status");
-                }
-                let decoded: PacketCarStatusData = decoded.unwrap();
-                // eprintln!("{}", serde_json::to_string_pretty(&decoded).unwrap());
-                F1Data::Status(decoded)
-            }
-            _ => continue,
-        };
+use F1Data::{
+    Motion, 
+    Telemetry,
+    Classification,
+    Damage,
+    SessionHistory,
+    Lap,
+    Event,
+    Session,
+    Participant,
+    Setup,
+    Status
+};
 
-        yield to_yield;
-    }
+
+pub async fn event_loop_generator(ip: &str, port: &str) -> impl Generator<Yield = F1Data, Return = ()> {
+
+    deserialize!(
+        ip,
+        port,
+        // Packets of size _ bytes parsed into type X and shoved in Enum Variant Y
+        1464 => (PacketMotionData, Motion),
+        1347 => (PacketCarTelemetryData, Telemetry),
+        1015 => (PacketClassificationData, Classification),
+        948  => (PacketCarDamageData, Damage),
+        1155 => (PacketSessionHistoryData, SessionHistory),
+        972  => (PacketLapData, Lap),
+        40   => (PacketEventFinal, Event),
+        632  => (PacketSessionData, Session),
+        1257 => (PacketParticipantData, Participant), 
+        1102 => (PacketCarSetupData, Setup),
+        // 2347 => (PacketCarTelemetryData, _),
+        1058 => (PacketCarStatusData, Status)
+    )
+
 }

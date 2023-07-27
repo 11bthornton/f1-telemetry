@@ -28,3 +28,22 @@ pub enum F1Data {
     Classification(final_classification::PacketClassificationData),
     SessionHistory(session_history::PacketSessionHistoryData),
 }
+
+pub use car_damage_data::PacketCarDamageData;
+pub use car_setup_data::PacketCarSetupData;
+pub use car_status_data::PacketCarStatusData;
+pub use car_telemetry_data::CarTelemetryData;
+pub use event_data::PacketEventFinal as PacketEventData;
+pub use final_classification::PacketClassificationData;
+pub use lap_data::LapData;
+pub use motion_data::PacketMotionData;
+pub use packet_header::PacketHeader;
+pub use participant_data::PacketParticipantData;
+pub use session_data::PacketSessionData;
+pub use session_history::PacketSessionHistoryData;
+
+macro_rules! deserialize_to {
+    ($type:ty) => {
+        
+    };
+}

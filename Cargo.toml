@@ -2,5 +2,7 @@
 
 members = [
     "application",
-    "f1-game-client"
+    "f1-game-client",
+    "spoofer",
+    "test-app"
 ]
