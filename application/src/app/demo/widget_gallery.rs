@@ -1,5 +1,5 @@
 use f1_game_client::telemetry_data::car_telemetry_data::{PacketCarTelemetryData, CarTelemetryData};
-use crate::PARTICIPANTS;
+// use crate::PARTICIPANTS;
 use std::sync::{Arc, Mutex};
 
 #[derive(Debug, PartialEq)]
@@ -116,221 +116,221 @@ impl super::View for WidgetGallery {
 
 impl WidgetGallery {
     fn gallery_grid_contents(&mut self, ui: &mut egui::Ui) {
-        let Self {
-            enabled: _,
-            visible: _,
-            boolean,
-            radio,
-            scalar,
-            string,
-            color,
-            animate_progress_bar,
-            #[cfg(feature = "chrono")]
-            date,
-            texture,
-            data,
-            car_index,
-            car_name,
-        } = self;
+        // let Self {
+        //     enabled: _,
+        //     visible: _,
+        //     boolean,
+        //     radio,
+        //     scalar,
+        //     string,
+        //     color,
+        //     animate_progress_bar,
+        //     #[cfg(feature = "chrono")]
+        //     date,
+        //     texture,
+        //     data,
+        //     car_index,
+        //     car_name,
+        // } = self;
 
-        let texture: &egui::TextureHandle = texture.get_or_insert_with(|| {
-            ui.ctx().load_texture(
-                "example",
-                egui::ColorImage::example(),
-                egui::TextureFilter::Linear,
-            )
-        });
+        // let texture: &egui::TextureHandle = texture.get_or_insert_with(|| {
+        //     ui.ctx().load_texture(
+        //         "example",
+        //         egui::ColorImage::example(),
+        //         egui::TextureFilter::Linear,
+        //     )
+        // });
 
-        ui.label("Select Car");
+        // ui.label("Select Car");
         
-        let mut data : &CarTelemetryData = &Default::default();
+        // let mut data : &CarTelemetryData = &Default::default();
 
-        if crate::TELEM.lock().unwrap().is_none() {
-            return;
-        }
+        // if crate::TELEM.lock().unwrap().is_none() {
+        //     return;
+        // }
 
-        let c_data = crate::TELEM.lock().unwrap();
-        data = &c_data.as_ref().unwrap().telemetry_data[*car_index as usize];
+        // let c_data = crate::TELEM.lock().unwrap();
+        // data = &c_data.as_ref().unwrap().telemetry_data[*car_index as usize];
 
-        let combo = egui::ComboBox::from_label("")
-            .selected_text(car_name.as_str())
-            .width(150.0)
-            .show_ui(ui, |ui| {
-                if let Some(participants) = (*PARTICIPANTS).lock().unwrap().as_ref() {
-                    for (index, participant) in participants.participants.iter().enumerate() {
-                        if !participant.name().trim().is_empty() {
-                            ui.selectable_value(car_index, index as u16, participant.name());
-                        } else {
-                            ui.selectable_value(
-                                car_index,
-                                index as u16,
-                                format!("Car {}", index.to_string()),
-                            );
-                        }
-                    }
-                }
-            });
+        // let combo = egui::ComboBox::from_label("")
+        //     .selected_text(car_name.as_str())
+        //     .width(150.0)
+        //     .show_ui(ui, |ui| {
+        //         if let Some(participants) = (*PARTICIPANTS).lock().unwrap().as_ref() {
+        //             for (index, participant) in participants.participants.iter().enumerate() {
+        //                 if !participant.name().trim().is_empty() {
+        //                     ui.selectable_value(car_index, index as u16, participant.name());
+        //                 } else {
+        //                     ui.selectable_value(
+        //                         car_index,
+        //                         index as u16,
+        //                         format!("Car {}", index.to_string()),
+        //                     );
+        //                 }
+        //             }
+        //         }
+        //     });
 
-        if let Some(participants) = (*PARTICIPANTS).lock().unwrap().as_ref() {
-            self.car_name = participants.participants[*car_index as usize]
-                .name()
-                .to_string();
-        }
+        // if let Some(participants) = (*PARTICIPANTS).lock().unwrap().as_ref() {
+        //     self.car_name = participants.participants[*car_index as usize]
+        //         .name()
+        //         .to_string();
+        // }
 
-        ui.end_row();
+        // ui.end_row();
 
-        ui.label("Speed");
-        ui.label(data.speed.to_string());
-        ui.end_row();
+        // ui.label("Speed");
+        // ui.label(data.speed.to_string());
+        // ui.end_row();
 
-        use egui::special_emojis::GITHUB;
+        // use egui::special_emojis::GITHUB;
 
-        ui.label("Gear");
-        ui.label(data.gear.to_string());
-        ui.end_row();
+        // ui.label("Gear");
+        // ui.label(data.gear.to_string());
+        // ui.end_row();
 
-        ui.label("Engine RPM");
-        ui.label(data.engine_rpm.to_string());
-        ui.end_row();
+        // ui.label("Engine RPM");
+        // ui.label(data.engine_rpm.to_string());
+        // ui.end_row();
 
-        ui.label("Throttle");
-        let throttle = data.throttle;
-        let throttle_bar = egui::ProgressBar::new(throttle)
-            .show_percentage()
-            .animate(*animate_progress_bar);
+        // ui.label("Throttle");
+        // let throttle = data.throttle;
+        // let throttle_bar = egui::ProgressBar::new(throttle)
+        //     .show_percentage()
+        //     .animate(*animate_progress_bar);
 
-        *animate_progress_bar = ui
-            .add(throttle_bar)
-            .on_hover_text("The progress bar can be animated!")
-            .hovered();
-        ui.end_row();
+        // *animate_progress_bar = ui
+        //     .add(throttle_bar)
+        //     .on_hover_text("The progress bar can be animated!")
+        //     .hovered();
+        // ui.end_row();
 
-        ui.label("Brake");
-        let brake = data.brake;
+        // ui.label("Brake");
+        // let brake = data.brake;
 
-        let brake_bar = egui::ProgressBar::new(brake)
-            .show_percentage()
-            .animate(*animate_progress_bar);
+        // let brake_bar = egui::ProgressBar::new(brake)
+        //     .show_percentage()
+        //     .animate(*animate_progress_bar);
 
-        *animate_progress_bar = ui
-            .add(brake_bar)
-            .on_hover_text("The progress bar can be animated!")
-            .hovered();
-        ui.end_row();
+        // *animate_progress_bar = ui
+        //     .add(brake_bar)
+        //     .on_hover_text("The progress bar can be animated!")
+        //     .hovered();
+        // ui.end_row();
 
-        ui.label("Clutch");
-        ui.label(match data.clutch {
-            100 => "Engaged",
-            _ => "Disengaged",
-        });
-        ui.end_row();
+        // ui.label("Clutch");
+        // ui.label(match data.clutch {
+        //     100 => "Engaged",
+        //     _ => "Disengaged",
+        // });
+        // ui.end_row();
 
-        ui.label("DRS");
-        ui.label(match data.drs {
-            1 => "Engaged",
-            _ => "Disengaged",
-        });
-        ui.end_row();
+        // ui.label("DRS");
+        // ui.label(match data.drs {
+        //     1 => "Engaged",
+        //     _ => "Disengaged",
+        // });
+        // ui.end_row();
 
-        ui.label("Front surface temperatures");
-        ui.label(format!("{}°C {}°C", data.tyre_surface_temps[2].to_string(), data.tyre_surface_temps[3].to_string()));
-        ui.end_row();
+        // ui.label("Front surface temperatures");
+        // ui.label(format!("{}°C {}°C", data.tyre_surface_temps[2].to_string(), data.tyre_surface_temps[3].to_string()));
+        // ui.end_row();
 
-        ui.label("Rear surface temperatures");
-        ui.label(format!("{}°C {}°C", data.tyre_surface_temps[0].to_string(), data.tyre_surface_temps[1].to_string()));
-        ui.end_row();
+        // ui.label("Rear surface temperatures");
+        // ui.label(format!("{}°C {}°C", data.tyre_surface_temps[0].to_string(), data.tyre_surface_temps[1].to_string()));
+        // ui.end_row();
 
 
-        ui.label("Front carcass temperatures");
-        ui.label(format!("{}°C {}°C", data.tyre_inner_temps[2].to_string(), data.tyre_surface_temps[3].to_string()));
-        ui.end_row();
+        // ui.label("Front carcass temperatures");
+        // ui.label(format!("{}°C {}°C", data.tyre_inner_temps[2].to_string(), data.tyre_surface_temps[3].to_string()));
+        // ui.end_row();
 
-        ui.label("Rear carcass temperatures");
-        ui.label(format!("{}°C {}°C", data.tyre_inner_temps[0].to_string(), data.tyre_surface_temps[1].to_string()));
-        ui.end_row();
+        // ui.label("Rear carcass temperatures");
+        // ui.label(format!("{}°C {}°C", data.tyre_inner_temps[0].to_string(), data.tyre_surface_temps[1].to_string()));
+        // ui.end_row();
         
 
-        ui.label("Front Left Tyre Pressure");
-        ui.label(data.tyre_pressures[0].to_string());
-        ui.end_row();
+        // ui.label("Front Left Tyre Pressure");
+        // ui.label(data.tyre_pressures[0].to_string());
+        // ui.end_row();
 
-        ui.label("Front Right Tyre Pressure");
-        ui.label(data.tyre_pressures[1].to_string());
-        ui.end_row();
+        // ui.label("Front Right Tyre Pressure");
+        // ui.label(data.tyre_pressures[1].to_string());
+        // ui.end_row();
 
-        ui.label("Rear Left Tyre Pressure");
-        ui.label(data.tyre_pressures[2].to_string());
-        ui.end_row();
+        // ui.label("Rear Left Tyre Pressure");
+        // ui.label(data.tyre_pressures[2].to_string());
+        // ui.end_row();
 
-        ui.label("Rear Right Tyre Pressure");
-        ui.label(data.tyre_pressures[3].to_string());
-        ui.end_row();
+        // ui.label("Rear Right Tyre Pressure");
+        // ui.label(data.tyre_pressures[3].to_string());
+        // ui.end_row();
 
-        ui.label("Engine Temperature");
-        ui.label(data.engine_temp.to_string());
-        ui.end_row();
+        // ui.label("Engine Temperature");
+        // ui.label(data.engine_temp.to_string());
+        // ui.end_row();
 
-        ui.add(doc_link_label("RadioButton", "radio"));
-        ui.horizontal(|ui| {
-            ui.radio_value(radio, Enum::First, "First");
-            ui.radio_value(radio, Enum::Second, "Second");
-            ui.radio_value(radio, Enum::Third, "Third");
-        });
-        ui.end_row();
+        // ui.add(doc_link_label("RadioButton", "radio"));
+        // ui.horizontal(|ui| {
+        //     ui.radio_value(radio, Enum::First, "First");
+        //     ui.radio_value(radio, Enum::Second, "Second");
+        //     ui.radio_value(radio, Enum::Third, "Third");
+        // });
+        // ui.end_row();
 
-        ui.add(doc_link_label(
-            "SelectableLabel",
-            "selectable_value,SelectableLabel",
-        ));
-        ui.horizontal(|ui| {
-            ui.selectable_value(radio, Enum::First, "First");
-            ui.selectable_value(radio, Enum::Second, "Second");
-            ui.selectable_value(radio, Enum::Third, "Third");
-        });
-        ui.end_row();
+        // ui.add(doc_link_label(
+        //     "SelectableLabel",
+        //     "selectable_value,SelectableLabel",
+        // ));
+        // ui.horizontal(|ui| {
+        //     ui.selectable_value(radio, Enum::First, "First");
+        //     ui.selectable_value(radio, Enum::Second, "Second");
+        //     ui.selectable_value(radio, Enum::Third, "Third");
+        // });
+        // ui.end_row();
 
-        ui.add(doc_link_label("ComboBox", "ComboBox"));
+        // ui.add(doc_link_label("ComboBox", "ComboBox"));
 
-        egui::ComboBox::from_label("Take your pick")
-            .selected_text(format!("{:?}", radio))
-            .show_ui(ui, |ui| {
-                ui.selectable_value(radio, Enum::First, "First");
-                ui.selectable_value(radio, Enum::Second, "Second");
-                ui.selectable_value(radio, Enum::Third, "Third");
-            });
-        ui.end_row();
+        // egui::ComboBox::from_label("Take your pick")
+        //     .selected_text(format!("{:?}", radio))
+        //     .show_ui(ui, |ui| {
+        //         ui.selectable_value(radio, Enum::First, "First");
+        //         ui.selectable_value(radio, Enum::Second, "Second");
+        //         ui.selectable_value(radio, Enum::Third, "Third");
+        //     });
+        // ui.end_row();
 
-        ui.add(doc_link_label("Slider", "Slider"));
-        ui.add(egui::Slider::new(scalar, 0.0..=360.0).suffix("°"));
-        ui.end_row();
+        // ui.add(doc_link_label("Slider", "Slider"));
+        // ui.add(egui::Slider::new(scalar, 0.0..=360.0).suffix("°"));
+        // ui.end_row();
 
-        ui.add(doc_link_label("DragValue", "DragValue"));
-        ui.add(egui::DragValue::new(scalar).speed(1.0));
-        ui.end_row();
+        // ui.add(doc_link_label("DragValue", "DragValue"));
+        // ui.add(egui::DragValue::new(scalar).speed(1.0));
+        // ui.end_row();
 
-        ui.add(doc_link_label("Color picker", "color_edit"));
-        ui.color_edit_button_srgba(color);
-        ui.end_row();
+        // ui.add(doc_link_label("Color picker", "color_edit"));
+        // ui.color_edit_button_srgba(color);
+        // ui.end_row();
 
-        let img_size = 16.0 * texture.size_vec2() / texture.size_vec2().y;
+        // let img_size = 16.0 * texture.size_vec2() / texture.size_vec2().y;
 
-        ui.add(doc_link_label("Image", "Image"));
-        ui.image(texture, img_size);
-        ui.end_row();
+        // ui.add(doc_link_label("Image", "Image"));
+        // ui.image(texture, img_size);
+        // ui.end_row();
 
-        ui.add(doc_link_label("ImageButton", "ImageButton"));
-        if ui.add(egui::ImageButton::new(texture, img_size)).clicked() {
-            *boolean = !*boolean;
-        }
-        ui.end_row();
+        // ui.add(doc_link_label("ImageButton", "ImageButton"));
+        // if ui.add(egui::ImageButton::new(texture, img_size)).clicked() {
+        //     *boolean = !*boolean;
+        // }
+        // ui.end_row();
 
-        #[cfg(feature = "chrono")]
-        {
-            let date = date.get_or_insert_with(|| chrono::offset::Utc::now().date());
-            ui.add(doc_link_label("DatePickerButton", "DatePickerButton"));
-            ui.add(egui_extras::DatePickerButton::new(date));
-            ui.end_row();
-        }
+        // #[cfg(feature = "chrono")]
+        // {
+        //     let date = date.get_or_insert_with(|| chrono::offset::Utc::now().date());
+        //     ui.add(doc_link_label("DatePickerButton", "DatePickerButton"));
+        //     ui.add(egui_extras::DatePickerButton::new(date));
+        //     ui.end_row();
+        // }
     }
 }
 

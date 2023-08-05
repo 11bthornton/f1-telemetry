@@ -1,9 +1,9 @@
-use std::convert::TryInto;
-
 use crate::telemetry_data::packet_header::PacketHeader;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug, Serialize, Clone)]
+use super::car_status_data;
+
+#[derive(Deserialize, Debug, Serialize, Clone, Copy)]
 pub struct PacketSessionHistoryData {
     pub header: PacketHeader,
 
@@ -21,43 +21,48 @@ pub struct PacketSessionHistoryData {
     pub tyre_stints_history_data: [TyreStintHistoryData; 8],
 }
 
-#[derive(Deserialize, Debug, Serialize, Clone)]
+use serde_big_array::BigArray;
+#[derive(Deserialize, Debug, Serialize, Clone, Copy)]
 pub struct HistoryData {
-    pub first_32: [LapHistoryData; 32],
-    pub second_32: [LapHistoryData; 32],
-    pub third_32: [LapHistoryData; 32],
-    pub last_4: [LapHistoryData; 4],
+    // pub first_32: [LapHistoryData; 32],
+    // pub second_32: [LapHistoryData; 32],
+    // pub third_32: [LapHistoryData; 32],
+    // pub last_4: [LapHistoryData; 4],
+    #[serde(with = "BigArray")]
+    pub data: [LapHistoryData; 100],
 }
 
-#[derive(Deserialize, Debug, Serialize, Clone)]
+#[derive(Deserialize, Debug, Serialize, Clone, Copy)]
 pub struct LapHistoryData {
     pub lap_time_in_ms: u32,
     pub sector_1_time_in_ms: u16,
+    pub sector_1_time_minutes: u8,
     pub sector_2_time_in_ms: u16,
+    pub sector_2_time_minutes: u8,
     pub sector_3_time_in_ms: u16,
+    pub sector_3_time_minutes: u8,
     pub lap_valid_bit_flags: u8,
 }
 
-#[derive(Deserialize, Debug, Serialize, Clone)]
+#[derive(Deserialize, Debug, Serialize, Clone, Copy)]
 pub struct TyreStintHistoryData {
     pub end_lap: u8,
-    pub tyre_actual_compound: u8,
-    pub tyre_visual_compound: u8,
+    pub tyre_actual_compound: car_status_data::ActualTyreCompound,
+    pub tyre_visual_compound: car_status_data::VisualTyreCompound,
 }
 
-
 impl PacketSessionHistoryData {
+    // pub fn concat(&self) -> [LapHistoryData; 100] {
+    //     let data = self.lap_history_data.clone();
 
-    pub fn concat(&self) -> [LapHistoryData; 100] {
-        let data = self.lap_history_data.clone();
-
-        [
-            data.first_32.as_slice(),
-            data.second_32.as_slice(),
-            data.third_32.as_slice(),
-            data.last_4.as_slice()
-        ].concat().try_into().unwrap()
-
-
-    }
+    //     [
+    //         data.first_32.as_slice(),
+    //         data.second_32.as_slice(),
+    //         data.third_32.as_slice(),
+    //         data.last_4.as_slice(),
+    //     ]
+    //     .concat()
+    //     .try_into()
+    //     .unwrap()
+    // }
 }

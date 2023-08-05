@@ -1,7 +1,7 @@
 use crate::telemetry_data::packet_header::PacketHeader;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug, Default, Serialize)]
+#[derive(Deserialize, Debug, Default, Serialize, Copy, Clone)]
 pub struct CarMotionData {
     pub world_position_x: f32,     // World space X position
     pub world_position_y: f32,     // World space Y position
@@ -23,35 +23,27 @@ pub struct CarMotionData {
     pub roll: f32,                 // Roll angle in radians
 }
 
-#[derive(Deserialize, Debug, Default, Serialize)]
+#[derive(Deserialize, Debug, Default, Serialize, Clone, Copy)]
 pub struct PacketMotionData {
     pub header: PacketHeader, // Header
 
     pub car_motion_data: [CarMotionData; 22], // Data for all cars on track
 
-    // Extra player car ONLY data
-    pub suspension_position: [f32; 4], // Note: All wheel arrays have the following order:
-    pub suspension_velocity: [f32; 4], // RL, RR, FL, FR
-    pub suspension_acceleration: [f32; 4], // RL, RR, FL, FR
-    pub wheel_speed: [f32; 4],         // Speed of each wheel
-    pub wheel_slip: [f32; 4],          // Slip ratio for each wheel
+                                              // // Extra player car ONLY data
+                                              // pub suspension_position: [f32; 4], // Note: All wheel arrays have the following order:
+                                              // pub suspension_velocity: [f32; 4], // RL, RR, FL, FR
+                                              // pub suspension_acceleration: [f32; 4], // RL, RR, FL, FR
+                                              // pub wheel_speed: [f32; 4],         // Speed of each wheel
+                                              // pub wheel_slip: [f32; 4],          // Slip ratio for each wheel
 
-    pub local_velocity_x: f32,       // Velocity in local space
-    pub local_velocity_y: f32,       // Velocity in local space
-    pub local_velocity_z: f32,       // Velocity in local space
-    pub angular_velocity_x: f32,     // Angular velocity x-component
-    pub angular_velocity_y: f32,     // Angular velocity y-component
-    pub angular_velocity_z: f32,     // Angular velocity z-component
-    pub angular_acceleration_x: f32, // Angular velocity x-component
-    pub angular_acceleration_y: f32, // Angular velocity y-component
-    pub angular_acceleration_z: f32, // Angular velocity z-component
-    pub front_wheels_angle: f32,     // Current front wheels angle in radians
-}
-
-impl Copy for CarMotionData {}
-
-impl Clone for CarMotionData {
-    fn clone(&self) -> Self {
-        *self
-    }
+                                              // pub local_velocity_x: f32,       // Velocity in local space
+                                              // pub local_velocity_y: f32,       // Velocity in local space
+                                              // pub local_velocity_z: f32,       // Velocity in local space
+                                              // pub angular_velocity_x: f32,     // Angular velocity x-component
+                                              // pub angular_velocity_y: f32,     // Angular velocity y-component
+                                              // pub angular_velocity_z: f32,     // Angular velocity z-component
+                                              // pub angular_acceleration_x: f32, // Angular velocity x-component
+                                              // pub angular_acceleration_y: f32, // Angular velocity y-component
+                                              // pub angular_acceleration_z: f32, // Angular velocity z-component
+                                              // pub front_wheels_angle: f32,     // Current front wheels angle in radians
 }

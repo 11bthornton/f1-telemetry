@@ -162,13 +162,13 @@ impl LineDemo {
     fn ui(&mut self, ui: &mut Ui) -> Response {
         self.options_ui(ui);
         
-        if crate::TELEM.lock().unwrap().is_none() {
+        // if crate::TELEM.lock().unwrap().is_none() {
 
-        } else {
-            let index = crate::TELEM.lock().unwrap().as_ref().unwrap().m_header.player_car_index;
-            self.throttle_trace.push(crate::TELEM.lock().unwrap().as_ref().unwrap().telemetry_data[index as usize].throttle);
-            self.brake_trace.push(crate::TELEM.lock().unwrap().as_ref().unwrap().telemetry_data[index as usize].brake);
-        }
+        // } else {
+        //     let index = crate::TELEM.lock().unwrap().as_ref().unwrap().m_header.player_car_index;
+        //     self.throttle_trace.push(crate::TELEM.lock().unwrap().as_ref().unwrap().telemetry_data[index as usize].throttle);
+        //     self.brake_trace.push(crate::TELEM.lock().unwrap().as_ref().unwrap().telemetry_data[index as usize].brake);
+        // }
 
         // if self.throttle_trace.len() > 600 {
         //     self.throttle_trace.clear();

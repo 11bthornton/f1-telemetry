@@ -5,16 +5,18 @@ pub mod car_telemetry_data;
 pub mod event_data;
 pub mod final_classification;
 pub mod lap_data;
+pub mod lobby_info;
 pub mod motion_data;
+pub mod motion_extended_data;
 pub mod packet_header;
 pub mod participant_data;
 pub mod session_data;
 pub mod session_history;
-
+pub mod tyre_set_data;
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub enum F1Data {
     Damage(car_damage_data::PacketCarDamageData),
     Setup(car_setup_data::PacketCarSetupData),
@@ -27,6 +29,9 @@ pub enum F1Data {
     Telemetry(car_telemetry_data::PacketCarTelemetryData),
     Classification(final_classification::PacketClassificationData),
     SessionHistory(session_history::PacketSessionHistoryData),
+    Lobby(lobby_info::PacketLobbyInfoData),
+    ExtendedMotion(motion_extended_data::PacketMotionExData),
+    TyreSetData(tyre_set_data::PacketTyreSetsData),
 }
 
 pub use car_damage_data::PacketCarDamageData;
@@ -43,7 +48,5 @@ pub use session_data::PacketSessionData;
 pub use session_history::PacketSessionHistoryData;
 
 macro_rules! deserialize_to {
-    ($type:ty) => {
-        
-    };
+    ($type:ty) => {};
 }

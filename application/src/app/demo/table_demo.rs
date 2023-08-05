@@ -4,7 +4,7 @@ use egui::{RichText, Color32};
 use std::time::Duration;
 use f1_game_client::telemetry_data::{participant_data, session_history::PacketSessionHistoryData};
 
-use crate::app::demo::toggle_switch::toggle;
+use crate::{app::demo::toggle_switch::toggle, GAME};
 
 #[derive(PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
@@ -90,11 +90,11 @@ impl TableDemo {
             ui.add(toggle(&mut self.toggle));
         });
 
-        if crate::HISTORY.lock().unwrap().is_none() {
+        if crate::GAME.session_history_data.read().unwrap().is_none() {
             return;
         }
 
-        let history = crate::HISTORY.lock().unwrap();
+        let history = crate::GAME.session_history_data.read().unwrap();
 
         if history.is_none() {
             return;
@@ -104,7 +104,7 @@ impl TableDemo {
 
         self.data[history.car_index as usize] = Some(history.clone());
 
-        let participant_data = crate::PARTICIPANTS.lock().unwrap();
+        let participant_data = crate::GAME.participant_data.read().unwrap();
         if participant_data.is_none() {
             return;
         }
@@ -129,7 +129,7 @@ impl TableDemo {
             .resizable(self.resizable)
             .header(20.0, |mut header| {
                 header.col(|ui| {
-                    ui.heading(format!("Position {}", uid));
+                    ui.heading(format!("Position"));
                 });
                 header.col(|ui| {
                     ui.heading("Driver");
@@ -153,32 +153,26 @@ impl TableDemo {
             })
             .body(|mut body| {
                 
-
+                    if GAME.pecking_order_indices().is_none() {
+                        return;
+                    }
                 
                     // let  lap_data = &lap_data.as_ref().unwrap().lap_data;
                     let participant_data = participant_data.as_ref().unwrap();
 
-                    for (index, position) in crate::POSITIONS.lock().unwrap().iter().enumerate() {
+                    for (index, position) in GAME.pecking_order_indices().unwrap().iter().enumerate() {
                         let row_height = 18.0;
                         let participant = &participant_data.participants[*position as usize];
 
-                        // let participant_lap_data = &lap_data[*position as usize];
+                        let player_data = GAME.get_player_data(index);
+                        let participant_lap_data = player_data.lap_data.unwrap();
                         let history_data = &self.data[*position as usize];
 
-                        // if history_data.is_none() {
-                        //     continue;
-                        // }
-
-                        // let history_data = history_data.as_ref().unwrap();
-
-                        if participant.driver_id == 255 {
-                            continue;
-                        }
 
                         body.row(row_height, |mut row| {
 
                             row.col(|ui| {
-                                ui.label((index - 1).to_string());
+                                ui.label((index + 1).to_string());
                             });
                             row.col(|ui| {
                                 
@@ -186,6 +180,7 @@ impl TableDemo {
                                     ui.label(
                                 RichText::new(participant.name())
                                         .color(Color32::from_rgb(200, 50, 200))
+                        
                                     )
                                 } else {
                                     ui.label(participant.name())
@@ -196,7 +191,7 @@ impl TableDemo {
                                     ui.label(history_data.as_ref().unwrap().best_lap_time_num.to_string());
 
                                     ui.label(
-                                        format!("{:#?}", history_data.as_ref().unwrap().concat())
+                                        format!("{:#?}", history_data.as_ref().unwrap().lap_history_data.data)
                                     );
                                 });
 
@@ -207,79 +202,84 @@ impl TableDemo {
                             });
                             row.col(|ui| {
                                 // let duration = Duration::from_millis(participant_lap_data.last_lap_time_in_ms.into());
+
                                 
+                                if history_data.is_none() {
+                                    return;
+                                }
+
                                 let dur = if history_data.as_ref().unwrap().best_lap_time_num == 0 {
                                     None
                                 } else {
                                     let time = Duration::from_millis(
-                                        history_data.as_ref().unwrap().concat()[history_data.as_ref().unwrap().best_lap_time_num as usize - 1].lap_time_in_ms.into()
+                                        history_data.as_ref().unwrap().lap_history_data.data[history_data.as_ref().unwrap().best_lap_time_num as usize - 1].lap_time_in_ms.into()
                                     );
     
                                     Some(time)
                                 };
 
                                 ui.label(
-                                    format!("{:?}", pretty_print_duration(dur.as_ref()))
+                                    format!("{}", pretty_print_duration(dur.as_ref()))
                                 );
                             });
                             row.col(|ui| {
 
-                                // let dur = Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into());
+                                let dur = Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into());
 
-                                // let duration = if dur.is_zero() {
-                                //     None
-                                // } else {
-                                //     Some(&dur)
-                                // };
+                                let duration = if dur.is_zero() {
+                                    None
+                                } else {
+                                    Some(&dur)
+                                };
                                 
                                 ui.label(format!("{}", "Filler"));
                             });
                             row.col(|ui| {
-                                // let duration = Duration::from_millis(participant_lap_data.sector_1_time_in_ms.into());
+                                let duration = Duration::from_millis(participant_lap_data.sector1_time_in_ms.into());
                                 
-                                // if duration.is_zero() {
-                                //     // ui.label(format!("{:?}", Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into())));
-                                //     ui.label(format!("{:?}", "Filler"));
+                                if duration.is_zero() {
+                                    ui.label(format!("{:?}", Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into())));
+                                    // ui.label(format!("{:?}", "Filler"));
 
-                                // } else {
-                                //     ui.label(format!("{:?}", "Filler"));
-                                // }
+                                } else {
+                                    ui.label(format!("{:?}", "Filler"));
+                                }
                                 
-                                ui.label(format!("{:?}", "Filler"));
+                                // ui.label(format!("{:?}", "Filler"));
                                 
 
                             });
                             row.col(|ui| {
                                 
-                                // let duration_1 = Duration::from_millis(participant_lap_data.sector_1_time_in_ms.into());
-                                // let duration_2 = Duration::from_millis(participant_lap_data.sector_2_time_in_ms.into());
-                                // let duration_lap = Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into());
+                                let duration_1 = Duration::from_millis(participant_lap_data.sector1_time_in_ms.into());
+                                let duration_2 = Duration::from_millis(participant_lap_data.sector2_time_in_ms.into());
+                                let duration_lap = Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into());
 
-                                // if duration_1.is_zero() {
-                                //     ui.label(format!("{:?}", Duration::from_millis(0)));
-                                // } else {
-                                //     if duration_2.is_zero() {
-                                //         ui.label(format!("{:?}", duration_lap - duration_1));
-                                //     } else {
-                                //         ui.label(format!("{:?}", duration_2));
-                                //     }
-                                // }
+                                if duration_1.is_zero() {
+                                    ui.label(format!("{:?}", Duration::from_millis(0)));
+                                } else {
+                                    if duration_2.is_zero() {
+                                        ui.label(format!("{:?}", duration_lap - duration_1));
+                                    } else {
+                                        ui.label(format!("{:?}", duration_2));
+                                    }
+                                }
 
-                                ui.label("Filler");
+                                // ui.label("Filler");
                                 
                             });
                             row.col(|ui| {
-                                // let duration_1 = Duration::from_millis(participant_lap_data.sector_1_time_in_ms.into());
-                                // let duration_2 = Duration::from_millis(participant_lap_data.sector_2_time_in_ms.into());
-                                // let duration_lap = Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into());
+                                let duration_1 = Duration::from_millis(participant_lap_data.sector1_time_in_ms.into());
+                                let duration_2 = Duration::from_millis(participant_lap_data.sector2_time_in_ms.into());
+                                let duration_lap = Duration::from_millis(participant_lap_data.current_lap_time_in_ms.into());
 
-                                // if duration_2.is_zero() {
-                                //     ui.label(format!("{:?} FIRST BRANCH", Duration::from_millis(0)));
-                                // } else {
-                                //     ui.label(format!("{:?}", duration_lap));
-                                // }
+                                if duration_2.is_zero() {
+                                    ui.label(format!("{:?} FIRST BRANCH", Duration::from_millis(0)));
+                                } else {
+                                    ui.label(format!("{:?}", duration_lap));
+                                }
                                 
-                                ui.label("Filler");
+                                // ui.label("Filler");
                                 
                             });
                         });

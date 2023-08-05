@@ -1,7 +1,7 @@
 use crate::telemetry_data::packet_header::PacketHeader;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug, Serialize, Default)]
+#[derive(Deserialize, Debug, Serialize, Default, Clone, Copy)]
 pub struct PacketCarTelemetryData {
     pub m_header: PacketHeader,
     pub telemetry_data: [CarTelemetryData; 22],
@@ -10,7 +10,7 @@ pub struct PacketCarTelemetryData {
     pub suggested_gear: i8,
 }
 
-#[derive(Deserialize, Debug, Serialize, Default)]
+#[derive(Deserialize, Debug, Serialize, Default, Clone, Copy)]
 pub struct CarTelemetryData {
     pub speed: u16,
     pub throttle: f32,

@@ -1,25 +1,17 @@
-use std::sync::{Arc, Mutex};
-
-use crate::app;
-use f1_game_client::telemetry_data::{
-    car_telemetry_data::PacketCarTelemetryData, motion_data::PacketMotionData,
-};
-
+use crate::{app, Game, GAME};
 use super::TelemetryViewerApp;
+
 pub struct TemplateApp {
-    pub telemetry_data: Arc<Mutex<PacketCarTelemetryData>>,
-    pub car_motion_data: Arc<Mutex<PacketMotionData>>,
+    pub game: &'static Game,
     pub state: State,
 }
 
 impl Default for TemplateApp {
+
     fn default() -> Self {
-        Self {
-            telemetry_data: Arc::new(Mutex::new(PacketCarTelemetryData::default())),
-            car_motion_data: Arc::new(Mutex::new(PacketMotionData::default())),
-            state: State::default(),
-        }
+        TemplateApp { game: &GAME, state: State::default() }
     }
+
 }
 
 impl TemplateApp {

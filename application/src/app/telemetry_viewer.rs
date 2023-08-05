@@ -12,7 +12,6 @@ use egui::plot::PlotPoints;
 use egui::plot::Points;
 use egui::plot::Text;
 
-use crate::{MOTION_DATA, PARTICIPANTS};
 
 use f1_game_client::{telemetry_data::car_telemetry_data::PacketCarTelemetryData};
 use std::fs::File;
@@ -22,10 +21,12 @@ use std::sync::{Arc, Mutex};
 
 use lazy_static::lazy_static;
 
+use crate::GAME;
+
 lazy_static! {
     static ref OUTERS : Vec<(f32, f32)> = {
 
-        let mut file = File::open("./application/austria.txt").unwrap();
+        let mut file = File::open("./austria.txt").unwrap();
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
 
@@ -109,10 +110,11 @@ impl TelemetryViewerApp {
             plot.show(ui, |ui| {
                 ui.line(self.track_map());
                 let mut index = 0;
-                if let Some(car_motions) = &*MOTION_DATA.lock().unwrap() {
-                    for (car, participant) in car_motions.car_motion_data.iter().zip(
-                        PARTICIPANTS.lock().unwrap().as_ref().unwrap().participants.iter()
-                    ) {
+                
+
+                if let Some(iterable) = GAME.position_data() {
+                    
+                    for (car, participant) in iterable {
                         ui.points(
                             Points::new(
                                 vec![[car.world_position_x as f64, -car.world_position_z as f64]]
@@ -128,8 +130,9 @@ impl TelemetryViewerApp {
                             self.track_drawer.push((car.world_position_x, car.world_position_z));
                         }
                         index += 1;
-                        ui.text(Text::new(PlotPoint::new(car.world_position_x, -car.world_position_z + 10.0), participant.name()));     
+                        ui.text(Text::new(PlotPoint::new(car.world_position_x, -car.world_position_z + 10.0), participant.name()));   
                     }
+
                 }
                 
             });

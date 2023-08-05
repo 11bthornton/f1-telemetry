@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 f1-game-client = {path = "../f1-game-client"}
+serde_repr = "0.1.16"
