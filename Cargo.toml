@@ -4,5 +4,6 @@ members = [
     "application",
     "f1-game-client",
     "spoofer",
-    "test-app"
+    "test-app",
+    "gpt-to-speech"
 ]
